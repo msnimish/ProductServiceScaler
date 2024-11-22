@@ -3,6 +3,7 @@ package com.msn.productservice.services;
 import com.msn.productservice.dtos.FakeStoreProductDTO;
 import com.msn.productservice.models.Category;
 import com.msn.productservice.models.Product;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -58,12 +59,14 @@ public class FakeStoreService implements ProductService {
         Category category = product.getCategory();
         fakeProduct.setCategory(category.getName());
 
-        FakeStoreProductDTO response = restTemplate.postForObject(
+        ResponseEntity<FakeStoreProductDTO> response = restTemplate.postForEntity(
                 "https://fakestoreapi.com/products",
                 fakeProduct,
                 FakeStoreProductDTO.class);
-
-        return response.toProduct();
+        if(response.getStatusCode().is5xxServerError()){
+            throw new RuntimeException("Error while saving product.");
+        }
+        return Objects.requireNonNull(response.getBody()).toProduct();
     }
 
 
