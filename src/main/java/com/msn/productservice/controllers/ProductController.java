@@ -32,17 +32,17 @@ public class ProductController {
     }
 
     @PutMapping("/products/{id}")
-    public ResponseEntity<Product> updateProduct(@RequestBody CreateProductRequestDTO product){
-        return ResponseEntity.ok(productService.createProduct(product.toProduct()));
+    public ResponseEntity<Product> updateProduct(@RequestBody CreateProductRequestDTO product, @PathVariable("id") Long id){
+        return ResponseEntity.ok(productService.updateProduct(product.toProduct(), id));
     }
 
     @PatchMapping("/products/{id}")
     public ResponseEntity<Product> patchProduct(@RequestBody CreateProductRequestDTO product){
-        return ResponseEntity.ok(productService.createProduct(product.toProduct()));
+        return ResponseEntity.ok(productService.patchProduct(product.toProduct()));
     }
 
     @DeleteMapping("/products/{id}")
-    public ResponseEntity<Product> deleteProduct(@RequestBody CreateProductRequestDTO product){
-        return ResponseEntity.ok(productService.createProduct(product.toProduct()));
+    public ResponseEntity<Product> deleteProduct(@PathVariable("id") long id){
+        return ResponseEntity.ok(productService.deleteProduct(id));
     }
 }

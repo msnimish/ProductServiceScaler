@@ -3,8 +3,7 @@ package com.msn.productservice.services;
 import com.msn.productservice.dtos.FakeStoreProductDTO;
 import com.msn.productservice.models.Category;
 import com.msn.productservice.models.Product;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -65,6 +64,49 @@ public class FakeStoreService implements ProductService {
                 FakeStoreProductDTO.class);
         if(response.getStatusCode().is5xxServerError()){
             throw new RuntimeException("Error while saving product.");
+        }
+        return Objects.requireNonNull(response.getBody()).toProduct();
+    }
+
+    @Override
+    public Product updateProduct(Product product, long id) {
+        FakeStoreProductDTO fakeProduct = new FakeStoreProductDTO();
+        fakeProduct.setTitle(product.getTitle());
+        fakeProduct.setPrice(String.valueOf(product.getPrice()));
+        fakeProduct.setDescription(product.getDescription());
+        fakeProduct.setImage(product.getImageUrl());
+        Category category = product.getCategory();
+        fakeProduct.setCategory(category.getName());
+
+        HttpEntity<FakeStoreProductDTO> requestEntity = new HttpEntity<>(fakeProduct);
+
+        ResponseEntity<FakeStoreProductDTO> response = restTemplate.exchange(
+                "https://fakestoreapi.com/products/"+id,
+                HttpMethod.PUT,
+                requestEntity,
+                FakeStoreProductDTO.class);
+
+        if(response.getStatusCode().is5xxServerError()){
+            throw new RuntimeException("Error while updating product.");
+        }
+        return Objects.requireNonNull(response.getBody()).toProduct();
+    }
+
+    @Override
+    public Product patchProduct(Product product) {
+        return null;
+    }
+
+    @Override
+    public Product deleteProduct(long id) {
+        ResponseEntity<FakeStoreProductDTO> response = restTemplate.exchange(
+                "https://fakestoreapi.com/products/"+id,
+                HttpMethod.DELETE,
+                null,
+                FakeStoreProductDTO.class);
+
+        if(response.getStatusCode().is5xxServerError()){
+            throw new RuntimeException("Error while deleting product.");
         }
         return Objects.requireNonNull(response.getBody()).toProduct();
     }
