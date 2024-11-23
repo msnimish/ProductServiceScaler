@@ -9,6 +9,6 @@ public interface ProductService {
     public Product getProductDetails(Long id);
     public Product createProduct(Product product);
     public Product updateProduct(Product product, long id);
-    public Product patchProduct(Product product);
+    public Product patchProduct(Product product, long id);
     public Product deleteProduct(long id);
 }
