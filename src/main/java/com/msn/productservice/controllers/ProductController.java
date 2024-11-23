@@ -37,8 +37,8 @@ public class ProductController {
     }
 
     @PatchMapping("/products/{id}")
-    public ResponseEntity<Product> patchProduct(@RequestBody CreateProductRequestDTO product){
-        return ResponseEntity.ok(productService.patchProduct(product.toProduct()));
+    public ResponseEntity<Product> patchProduct(@RequestBody CreateProductRequestDTO product, @PathVariable("id") long id){
+        return ResponseEntity.ok(productService.patchProduct(product.toProduct(), id));
     }
 
     @DeleteMapping("/products/{id}")

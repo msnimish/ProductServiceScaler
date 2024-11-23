@@ -93,8 +93,32 @@ public class FakeStoreService implements ProductService {
     }
 
     @Override
-    public Product patchProduct(Product product) {
-        return null;
+    public Product patchProduct(Product product, long id) {
+        FakeStoreProductDTO fakeProduct = new FakeStoreProductDTO();
+        fakeProduct.setTitle(product.getTitle());
+        fakeProduct.setPrice(String.valueOf(product.getPrice()));
+        fakeProduct.setDescription(product.getDescription());
+        fakeProduct.setImage(product.getImageUrl());
+        Category category = product.getCategory();
+        fakeProduct.setCategory(category.getName());
+
+        HttpEntity<FakeStoreProductDTO> requestEntity = new HttpEntity<>(fakeProduct);
+
+//        ResponseEntity<FakeStoreProductDTO> response = restTemplate.exchange(
+//                "https://fakestoreapi.com/products/"+id,
+//                HttpMethod.PATCH,
+//                requestEntity,
+//                FakeStoreProductDTO.class);
+
+        FakeStoreProductDTO response = restTemplate.patchForObject(
+                "https://fakestoreapi.com/products/"+id,
+                fakeProduct,
+                FakeStoreProductDTO.class);
+
+//        if(response.getStatusCode().is5xxServerError()){
+//            throw new RuntimeException("Error while patching product.");
+//        }
+        return Objects.requireNonNull(response).toProduct();
     }
 
     @Override
