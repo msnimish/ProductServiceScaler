@@ -1,8 +1,11 @@
 package com.msn.productservice.controllers;
 
 import com.msn.productservice.dtos.CreateProductRequestDTO;
+import com.msn.productservice.dtos.ErrorDto;
 import com.msn.productservice.models.Product;
 import com.msn.productservice.services.ProductService;
+import exceptions.ProductNotFoundException;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,5 +47,16 @@ public class ProductController {
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable("id") long id){
         return ResponseEntity.ok(productService.deleteProduct(id));
+    }
+
+
+    // This exception is specific to this controller so added here directly not in the Controller Advice
+    @ExceptionHandler(ProductNotFoundException.class)
+    public  ResponseEntity<ErrorDto> handlePNFException(){
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setMessage("Product not found");
+        ResponseEntity<ErrorDto> responseEntity = new ResponseEntity<>(errorDto, HttpStatusCode.valueOf(500));
+
+        return responseEntity;
     }
 }
