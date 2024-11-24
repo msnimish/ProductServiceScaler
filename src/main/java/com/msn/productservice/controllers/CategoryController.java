@@ -1,12 +1,8 @@
 package com.msn.productservice.controllers;
 
-import com.msn.productservice.dtos.ErrorDto;
 import com.msn.productservice.dtos.FakeStoreProductDTO;
 import com.msn.productservice.services.CategoryServicing;
-import exceptions.ProductNotFoundException;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;

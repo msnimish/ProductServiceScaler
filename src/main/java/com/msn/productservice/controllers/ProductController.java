@@ -4,7 +4,7 @@ import com.msn.productservice.dtos.CreateProductRequestDTO;
 import com.msn.productservice.dtos.ErrorDto;
 import com.msn.productservice.models.Product;
 import com.msn.productservice.services.ProductService;
-import exceptions.ProductNotFoundException;
+import com.msn.productservice.exceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
