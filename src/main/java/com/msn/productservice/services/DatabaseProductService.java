@@ -1,5 +1,6 @@
 package com.msn.productservice.services;
 
+import com.msn.productservice.exceptions.ProductNotFoundException;
 import com.msn.productservice.models.Category;
 import com.msn.productservice.models.Product;
 import com.msn.productservice.repositories.CategoryRepository;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("databaseProductService")
 //@Primary  --use this when @Qualifier is not preferred or some reason... Qualifier needs names to be provided to various services
@@ -23,11 +25,16 @@ public class DatabaseProductService implements ProductService{
     }
     @Override
     public List<Product> getAllProducts() {
-        return List.of();
+        return productRepository.findAll();
     }
 
     @Override
-    public Product getProductDetails(Long id) {
+    public Product getProductDetails(Long id){
+        Optional<Product> product =  productRepository.findById(id);
+        if(product.isEmpty()){
+            throw new ProductNotFoundException("Product does not exist");
+        }
+        Product productFromDb = product.get();
         return null;
     }
 
@@ -37,7 +44,7 @@ public class DatabaseProductService implements ProductService{
         if(categoryFromDB == null){
             Category category = new Category();
             category.setName(product.getCategory().getName());
-            categoryFromDB = categoryRepository.save(category);
+//            categoryFromDB = categoryRepository.save(category);
         }
 
         product.setCategory(categoryFromDB);
